@@ -1,6 +1,7 @@
 class ProductManager {
     constructor() {
         this.products = [];
+        this.path = path;
     }
 
     addProduct = (title, description, price, thumbnail, code, stock) => {
@@ -31,6 +32,9 @@ class ProductManager {
         productoById ? console.log(productoById) : console.log("No se encontró el producto.")
     }
     
+    // updateProduct = (id, campo) => {}
+
+    // deleteProduct = (id) => {}
 };
 
 const manejadorProductos = new ProductManager();
