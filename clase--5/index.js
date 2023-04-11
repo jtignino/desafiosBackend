@@ -4,7 +4,7 @@ const manager = new ProductManager('./files/Productos.json');
 
 const env = async () => {
     let productos = await manager.getProducts();
-    // console.log(productos);
+    console.log(productos);
     // console.log('-------------------------------');
 
     const product = {
