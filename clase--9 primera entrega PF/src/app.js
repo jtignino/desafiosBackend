@@ -1,6 +1,6 @@
 import express from 'express';
 import productRouter from './routes/products.router.js';
-import cartsRouter from './routes/cart.router.js';
+import cartsRouter from './routes/carts.router.js';
 
 const app = express();
 
@@ -11,6 +11,7 @@ app.use(express.urlencoded({extended: true}));
 app.use('/api/products',productRouter);
 app.use('/api/carts', cartsRouter);
 
+/*
 // ----- CRUD ----- 
 // READ
 app.get('/products', async (req, res) => {
@@ -33,7 +34,7 @@ app.post('', async (req, res) => {
         return res.status(400).send({ status: 'error', error: 'incomplete values' });
     }
 });
-
+*/
 
 
 app.listen(8080, () => console.log("Server running on port 8080"));
