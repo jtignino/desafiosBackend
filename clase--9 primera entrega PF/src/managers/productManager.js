@@ -20,20 +20,12 @@ export default class ProductManager {
     addProduct = async (product) => {
         try {
             const products = await this.getProducts();
-
-            // if (!(product.title && product.description && product.price && product.code && product.stock && product.status && product.category)) {
-            //     console.log('No puede haber campos vacíos.')
-            //     return
-            // }
-            
             products.length === 0 ? product.id = 1 : product.id = products[products.length - 1].id + 1
-
             products.find((el) => el.code === product.code) 
                 ? console.log(`El producto que intenta agregar con el código "${product.code}" ya existe.`) 
                 : products.push(product);
             
             await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
-
             return product;
             
         } catch (error) {
@@ -55,13 +47,6 @@ export default class ProductManager {
         try {
             let products = await this.getProducts();
             const productIndex = products.findIndex(product => product.id === id)
-            // if (productIndex !== -1) {
-            //     products[productIndex] = {...products[productIndex], ...newData}
-            //     await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
-            //     console.log(await this.getProducts());
-            // } else {
-            //     console.log('No se encontró el producto que desea actualizar.')
-            // }
             products[productIndex] = {...products[productIndex], ...newData}
             await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
             return products[productIndex];
@@ -74,13 +59,6 @@ export default class ProductManager {
         try {
             let products = await this.getProducts();
             const productIndex = products.findIndex(product => product.id === id)
-            // if (productIndex !== -1) {
-            //     products.splice(productIndex, 1);
-            //     await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
-            //     console.log(await this.getProducts());
-            // } else {
-            //     console.log('No se encontró el producto que desea eliminar.')
-            // }
             products.splice(productIndex, 1);
             await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
             return products;
@@ -89,6 +67,3 @@ export default class ProductManager {
         }
     }
 };
-
-// carts[cartIndex].products.push({ ...carts[cartIndex].products, quantity: carts[cartIndex].products.quantity + 1})
-// carts[cartIndex].products.push({ product: pid, quantity: 1 })
