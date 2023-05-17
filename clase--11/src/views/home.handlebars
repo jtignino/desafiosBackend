@@ -1,0 +1,19 @@
+<div>
+    <h1>Hola {{user.name}}!</h1>
+    {{#if isAdmin}}
+        {{#each products}}
+        <div>
+            <p>Título: {{this.title}}</p>
+            <p>Descripción: {{this.description}}</p>
+            <p>Precio: {{this.price}}</p>
+            <p>Código: {{this.code}}</p>
+            <p>Stock: {{this.stock}}</p>
+            <hr>
+        </div>
+        {{/each}}
+    {{else}}
+        <p>No tienes permisos</p>
+    {{/if}}
+</div>
+
+<script src="/js/index.js"></script>

@@ -1,0 +1,52 @@
+[
+	{
+		"title": "Producto de prueba 1",
+		"description": "pizza",
+		"code": "aaa",
+		"price": 2000,
+		"status": true,
+		"stock": 10,
+		"category": "food",
+		"id": 1
+	},
+	{
+		"title": "Producto de prueba 2",
+		"description": "empanadas",
+		"code": "bbb",
+		"price": 1000,
+		"status": true,
+		"stock": 10,
+		"category": "food",
+		"id": 2
+	},
+	{
+		"title": "Producto de prueba 3",
+		"description": "asado",
+		"code": "ccc",
+		"price": 3000,
+		"status": true,
+		"stock": 10,
+		"category": "food",
+		"id": 3
+	},
+	{
+		"title": "Producto de prueba 4",
+		"description": "pasta",
+		"code": "ddd",
+		"price": 200,
+		"status": true,
+		"stock": 10,
+		"category": "food",
+		"id": 4
+	},
+	{
+		"title": "Producto de prueba Z",
+		"description": "none",
+		"code": "abc123",
+		"price": 2000,
+		"status": true,
+		"stock": 10,
+		"category": "food",
+		"id": 5
+	}
+]
