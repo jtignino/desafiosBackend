@@ -30,7 +30,7 @@ app.use('/api/users', usersRouter);
 
 // Conexión a la DB utilizando mongoose:
 try {
-    await mongoose.connect('mongodb+srv://jonathanjat:VpF0lkWIlIVJGPpu@cluster39760jt.h28fnid.mongodb.net/test?retryWrites=true&w=majority');
+    await mongoose.connect('mongodb+srv://jonathanjat:VpF0lkWIlIVJGPpu@cluster39760jt.h28fnid.mongodb.net/ecommerce?retryWrites=true&w=majority');
     console.log('DB connected.');
 } catch (error) {
     console.log(error);
