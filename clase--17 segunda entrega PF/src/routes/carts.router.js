@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import CartManager from '../dao/fileManagers/cartManager.js';
-import Carts from '../dao/dbManagers/cartManager.js';
+import CartManager from '../dao/fileManagers/cart.manager.js';
+import Carts from '../dao/dbManagers/cart.manager.js';
 
 const router = Router();
 const cartManager = new Carts();
@@ -28,7 +28,6 @@ router.post('/:cid/product/:pid', async (req, res) => {
     try {
         const result = await cartManager.addToCart(cid, pid, qty);
         res.send({ status: 'success', payload: result });
-        // if (result.matchedCount === 0) console.log('No se encontro.')
     } catch (error) {
         res.status(500).send({ status: 'error', error });
     }
@@ -42,22 +41,26 @@ router.put('/:cid/product/:pid', async (req, res) => {
     try {
         const result = await cartManager.updateCart(cid, pid, qty);
         res.send({ status: 'success', payload: result });
-        // if (result.matchedCount === 0) console.log('No se encontro.')
     } catch (error) {
         res.status(500).send({ status: 'error', error });
     }
 });
 
 router.get('/:cid', async (req, res) => {
-    const cartId = Number(req.params.cid);
-    const cart = await cartManager.getCartById(cartId);
-    if (!cart) {
-        return res.status(404).send({ error: 'Cart not found.' });
+    const { cid } = req.params;
+
+    try {
+        const cart = await cartManager.getCartById(cid);
+        const products = cart[0].products;
+        console.log(products);
+        // res.send({ status: 'success', payload: products })
+        res.render('cart', { products });
+    } catch (error) {
+        res.status(500).send({ status: 'error', error });
     }
-    res.send({ status: 'success', cart });
 });
 
-// Agrego un servicio más para consultar todos los carritos
+// Agrego un servicio más para consultar todos los carritos, esto no está pedido dentro de la consigna
 router.get('/', async (req, res) => {
     try {
         const carts = await cartManager.getCarts();

@@ -1,0 +1,24 @@
+<div>
+    <h1>Todos los productos:</h1>
+    <div>
+        {{#each products}}
+        <ul>
+            <li>Título: {{this.title}}</li>
+            <li>Descripción: {{this.description}}</li>
+            <li>Precio: {{this.price}}</li>
+            <li>Stock: {{this.stock}}</li>
+            <button>Agregar al carrito</button>
+            <hr>
+        </ul>
+        {{/each}}
+
+        {{#if hasPrevPage}}
+        <a href="/products?page={{prevPage}}&limit=2"><button>Anterior</button></a>
+        {{/if}}
+
+        {{#if hasNextPage}}
+        <a href="/products?page={{nextPage}}&limit=2"><button>Siguiente</button></a>
+        <a href={{nextLink}}><button>Siguiente</button></a>
+        {{/if}}
+    </div>
+</div>

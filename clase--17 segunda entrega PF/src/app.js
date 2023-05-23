@@ -4,7 +4,6 @@ import cartsRouter from './routes/carts.router.js';
 import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
 import viewsRouter from './routes/views.router.js';
-import usersRouter from './routes/users.router.js';
 import __dirname from './utils.js';
 
 import mongoose from 'mongoose';
@@ -26,7 +25,6 @@ app.use('/api/products', productRouter);
 app.use('/api/carts', cartsRouter);
 
 app.use('/', viewsRouter);
-app.use('/api/users', usersRouter);
 
 // Conexión a la DB utilizando mongoose:
 try {
