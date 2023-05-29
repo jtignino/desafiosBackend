@@ -1,22 +1,10 @@
 import { Router } from "express";
 import ProductManager from '../dao/fileManagers/product.manager.js';
-import productModel from '../dao/models/product.model.js';
+import Products from '../dao/dbManagers/product.manager.js';
 
 const router = Router();
-const productManager = new ProductManager('./src/files/Productos.json');
-
-router.get('/', async (req, res) => {
-    const user = {
-        name: 'Jon'
-    };
-
-    const products = await productManager.getProducts();
-
-    res.render('home', {
-        user,
-        products
-    });
-});
+const productManager = new Products();
+// const productManager = new ProductManager('./src/files/Productos.json');
 
 router.get('/realtimeproducts', async (req, res) => {
     const products = await productManager.getProducts();
@@ -50,36 +38,28 @@ router.delete('/realtimeproducts/:pid', async (req, res) => {
 router.get('/products', async (req, res) => {
     const { page = 1, limit = 10, query, sort } = req.query;
     let sortObject, queryObject;
-    // console.log(typeof query, query)
+
+
+    if (isNaN(page)) {
+        return res.status(404).send({ status: 'error', message: 'Page not found.'});
+    }
+    
     const sortValidator = sort || false;
-    console.log(typeof sortValidator, sortValidator)
-
+    (sortValidator) ? (sortObject = { price: sort }) : (sortObject = {});   // utilizo este validador para saber qué parámetros debo enviarle al ".paginate()"
+    
     const queryValidator = query || false;
-    // console.log(typeof queryValidator, queryValidator)
-
-    let prevLink = null;
-    let nextLink = null;
+    
+    // Bloque de cod. que valida si recibí en la URL un "query" de tipo falsy, o un string igual a "true" (para los casos en que quiera filtrar por disponibilidad, o sea por el atributo "status"), o un string con el nombre de la categoría que quiero filtrar:
+    if (queryValidator === "true") {
+        queryObject = { status: query };
+    } else if (queryValidator === false) {
+        queryObject = {};
+    } else {
+        queryObject = { category: query };
+    }
+    // Fin del bloque
 
     try {
-        if (sortValidator) {
-            sortObject = { price: sort };
-        } else {
-            sortObject = {};
-        }
-    
-        if (queryValidator === "true") {
-            console.log('true');
-            queryObject = { status: query };
-        } else if (queryValidator === false) {
-            console.log('false');
-
-            queryObject = {};
-        } else {
-            console.log('tercer if');
-
-            queryObject = { category: query };
-        }
-    
         const {
             docs,
             totalPages,
@@ -87,46 +67,27 @@ router.get('/products', async (req, res) => {
             nextPage,
             hasPrevPage,
             hasNextPage
-        } = await productModel.paginate(queryObject, { limit, page, lean: true, sort: sortObject });
-        console.log(docs)
-        const products = docs;
+        } = await productManager.getProducts(limit, page, queryObject, sortObject);
 
-        if (!sortValidator) {
-            if (hasPrevPage) {
-                prevLink = `/products?page=${prevPage}&limit=${limit}&query=${query}`;
-                console.log("prev", prevLink);
-            } 
-            if (hasNextPage) {
-                nextLink = `/products?page=${nextPage}&limit=${limit}&query=${query}`;
-                console.log("next", nextLink);
-            } 
-        } else {
-            if (hasPrevPage) {
-                prevLink = `/products?page=${prevPage}&limit=${limit}&query=${query}&sort=${sort}`;
-                console.log("prev", prevLink);
-            } 
-            if (hasNextPage) {
-                nextLink = `/products?page=${nextPage}&limit=${limit}&query=${query}&sort=${sort}`;
-                console.log("next", nextLink);
-            }
+        if (docs.length === 0) {
+            return res.status(404).send({ status: 'error', message: 'Page not found.'});
         }
 
-        // res.send({
-        //     status: 'success',
-        //     products,
-        //     totalPages,
-        //     prevPage,
-        //     nextPage,
-        //     page,
-        //     hasPrevPage,
-        //     hasNextPage,
-        //     prevLink,
-        //     nextLink
-        // });
+        const products = docs;
+
+        // Bloque de cod. para concatenar los params (si es que existen) y crear los links:
+        let urlParams = '';
+        urlParams += `&limit=${limit}`;
+        (query) && (urlParams += `&query=${query}`);
+        (sort) && (urlParams += `&sort=${sort}`);
+
+        let prevLink = hasPrevPage ? `?page=${prevPage}${urlParams}` : null;
+        let nextLink = hasNextPage ? `?page=${nextPage}${urlParams}` : null;
+        // Fin del bloque
 
         res.render('products', {
             status: 'success',
-            products,
+            payload: products,
             totalPages,
             prevPage,
             nextPage,

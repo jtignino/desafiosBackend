@@ -5,8 +5,8 @@ export default class Products {
         console.log('Working products with DB')
     }
 
-    getProducts = async () => {
-        const products = await productModel.find().lean();
+    getProducts = async (limit, page, queryObject, sortObject) => {
+        const products = await productModel.paginate(queryObject, { limit, page, lean: true, sort: sortObject });
         return products;
     }
 

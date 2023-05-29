@@ -28,14 +28,30 @@ export default class Carts {
         );
         return result;
     }
-    
-    updateCart = async (cid, pid, qty) => {
+
+    updateProductInCart = async (cid, pid, qty) => {
         const result = await cartModel.findOneAndUpdate(
             { _id: cid, "products.product": pid },
             { $set: { "products.$.quantity": qty } },
             { new: true }
         );
         return result;
-    } 
+    }
+
+    deleteProduct = async (cid, pid) => {
+        const result = await cartModel.findOneAndUpdate(
+            { _id: cid },
+            { $pull: { products: { product: pid } } }
+        );
+        return result;
+    }
+
+    deleteCart = async (cid) => {
+        const result = await cartModel.findOneAndUpdate(
+            { _id: cid },
+            { products: [] }
+        );
+        return result;
+    }
 
 };

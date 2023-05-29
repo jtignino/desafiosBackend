@@ -44,6 +44,11 @@ router.get('/:pid', async (req, res) => {
 
     try {
         const product = await productManager.getProductById(pid);
+
+        if (product.length === 0) {
+            return res.status(404).send({ status: 'error', message: 'Product not found.' });
+        }
+
         res.send({ status: 'success', payload: product });
     } catch (error) {
         res.status(500).send({ status: 'error', error });
@@ -52,14 +57,18 @@ router.get('/:pid', async (req, res) => {
 
 router.put('/:pid', async (req, res) => {
     const { pid } = req.params;
-    const data = req.body;
-
-    if (!data.title || !data.description || !data.code || !data.price || !data.category || !data.stock) {
-        return res.status(400).send({ status: 'error', error: 'Incomplete values.' });
-    }
+    const { title, description, price, stock, category, status } = req.body;
+    const data = { title, description, price, stock, category, status }
 
     try {
         const result = await productManager.updateProduct(pid, data);
+
+        if (result.matchedCount === 0) {
+            return res.status(404).send({ status: 'error', message: 'Product not found.' });
+        } else if (result.modifiedCount === 0) {
+            return res.status(400).send({ status: 'error', message: 'The product was not modified.' });
+        }
+        
         res.send({ status: 'success', payload: result });
     } catch (error) {
         res.status(500).send({ status: 'error', error });
@@ -71,12 +80,19 @@ router.delete('/:pid', async (req, res) => {
 
     try {
         const result = await productManager.deleteProduct(pid);
+
+        if (result === null) {
+            return res.status(404).send({ status: 'error', message: 'Product not found.' });
+        }
+
         res.send({ status: 'success', payload: result });
     } catch (error) {
         res.status(500).send({ status: 'error', error });
     }
 });
 
+
+// Cod. para el manejo con fs.
 /*
 router.post('/', async (req, res) => {
     const product = req.body;
