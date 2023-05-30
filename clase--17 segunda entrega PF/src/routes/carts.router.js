@@ -35,11 +35,13 @@ router.post('/:cid/product/:pid', async (req, res) => {
             return res.status(404).send({ status: 'error', message: 'Product not found.' });
         }
 
-        const result = await cartManager.addToCart(cid, pid, qty);
-
-        if (result === null) {
+        const cart = await cartManager.getCartById(cid);
+        
+        if (cart.length === 0) {
             return res.status(404).send({ status: 'error', message: 'Cart not found.' });
         }
+
+        const result = await cartManager.addToCart(cid, pid, qty); 
 
         res.send({ status: 'success', payload: result });
     } catch (error) {
@@ -79,8 +81,8 @@ router.get('/', async (req, res) => {
 });
 
 
-// La consigna de este endpoint no está muy clara. Asumí que envío en el BODY un array de objetos con los productos correspondientes. 
-// Recorro ese array para enviar un elemento a la vez al método "updateProductInCart", el cual se encarga de actualizar el producto si es que existe.
+// Recorro el array de products que viene en el body para enviar un elemento a la vez al método "updateProductInCart", 
+// el cual se encarga de actualizar el producto si es que existe en el carrito.
 // Si no existe entonces retorna NULL, y llamo al método "addToCart" para agregarlo. 
 // De esta manera no se me duplican los productos dentro del mismo carrito.
 // Luego hago una consulta con "getCartById" solo para poder ver el resultado de la actualización. 
@@ -94,7 +96,7 @@ router.put('/:cid', async (req, res) => {
         if (cart.length === 0) {
             return res.status(404).send({ status: 'error', message: 'Cart not found.' });
         }
-        
+
         products.forEach(async product => {
             const result = await cartManager.updateProductInCart(cid, product.product, product.quantity);
 
@@ -122,7 +124,7 @@ router.put('/:cid/product/:pid', async (req, res) => {
         }
 
         const result = await cartManager.updateProductInCart(cid, pid, qty);
-        
+
         if (result === null) {
             return res.status(404).send({ status: 'error', message: 'Cart not found.' });
         }

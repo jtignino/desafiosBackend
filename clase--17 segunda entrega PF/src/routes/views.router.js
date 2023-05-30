@@ -41,17 +41,17 @@ router.get('/products', async (req, res) => {
 
 
     if (isNaN(page)) {
-        return res.status(404).send({ status: 'error', message: 'Page not found.'});
+        return res.status(404).send({ status: 'error', message: 'Page not found.' });
     }
-    
+
     const sortValidator = sort || false;
     (sortValidator) ? (sortObject = { price: sort }) : (sortObject = {});   // utilizo este validador para saber qué parámetros debo enviarle al ".paginate()"
-    
+
     const queryValidator = query || false;
-    
-    // Bloque de cod. que valida si recibí en la URL un "query" de tipo falsy, o un string igual a "true" (para los casos en que quiera filtrar por disponibilidad, o sea por el atributo "status"), o un string con el nombre de la categoría que quiero filtrar:
+
+    // Bloque de cod. que valida si recibí en la URL un "query" de tipo falsy, o un string igual a "true" (para los casos en que quiera filtrar por disponibilidad, o sea por stock > 0), o un string con el nombre de la categoría que quiero filtrar:
     if (queryValidator === "true") {
-        queryObject = { status: query };
+        queryObject = { stock: { $gt: 0 } };
     } else if (queryValidator === false) {
         queryObject = {};
     } else {
@@ -67,10 +67,10 @@ router.get('/products', async (req, res) => {
             nextPage,
             hasPrevPage,
             hasNextPage
-        } = await productManager.getProducts(limit, page, queryObject, sortObject);
+        } = await productManager.getProducts(queryObject, limit, page, sortObject);
 
         if (docs.length === 0) {
-            return res.status(404).send({ status: 'error', message: 'Page not found.'});
+            return res.status(404).send({ status: 'error', message: 'Page not found.' });
         }
 
         const products = docs;

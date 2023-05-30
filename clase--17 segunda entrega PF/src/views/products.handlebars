@@ -7,7 +7,8 @@
             <li>Descripción: {{this.description}}</li>
             <li>Precio: {{this.price}}</li>
             <li>Stock: {{this.stock}}</li>
-            <button>Agregar al carrito</button>
+            <li>Id: {{this._id}}</li>
+            <button onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
             <hr>
         </ul>
         {{/each}}
@@ -19,5 +20,10 @@
         {{#if hasNextPage}}
         <a href="/products{{nextLink}}"><button>Siguiente</button></a>
         {{/if}}
+
+        <button onclick="addToCart('6465cb6b661d4ecf61cc8f52')">Agregar al carrito</button>
+
     </div>
 </div>
+
+<script src="/js/products.js"></script>
