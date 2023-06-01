@@ -1,0 +1,15 @@
+<div>
+    <h1>Hola {{user.name}}!</h1>
+    {{#each products}}
+    <div>
+        <p>Título: {{this.title}}</p>
+        <p>Descripción: {{this.description}}</p>
+        <p>Precio: {{this.price}}</p>
+        <p>Código: {{this.code}}</p>
+        <p>Stock: {{this.stock}}</p>
+        <hr>
+    </div>
+    {{/each}}
+</div>
+
+<script src="/js/index.js"></script>
