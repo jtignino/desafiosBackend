@@ -40,7 +40,7 @@
 		"id": 4
 	},
 	{
-		"title": "Producto de prueba Z",
+		"title": "Producto de prueba 5",
 		"description": "none",
 		"code": "abc123",
 		"price": 2000,
@@ -48,5 +48,15 @@
 		"stock": 10,
 		"category": "food",
 		"id": 5
+	},
+	{
+		"title": "Producto de prueba 6",
+		"description": "none",
+		"code": "112233",
+		"price": 700,
+		"status": true,
+		"stock": 100,
+		"category": "food",
+		"id": 6
 	}
 ]

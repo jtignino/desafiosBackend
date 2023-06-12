@@ -6,15 +6,14 @@ import handlebars from 'express-handlebars';
 import viewsRouter from './routes/views.router.js';
 import usersRouter from './routes/users.router.js';
 import __dirname from './utils.js';
-
 import mongoose from 'mongoose';
-
+import { messageModel } from './dao/models/message.model.js';
 
 const app = express();
 
 // Parámetros de configuración
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(`${__dirname}/public`));
 
@@ -40,8 +39,24 @@ const server = app.listen(8080, () => console.log("Server running on port 8080")
 
 const io = new Server(server);
 
+const messages = [];
+const messagesDB = await messageModel.find().lean();
+
 io.on('connection', socket => {
     console.log(`Cliente ${socket.id} conectado.`);
+
+    socket.on('message', async data => {
+        messages.push(data);
+        await messageModel.create(data);
+        const messagesDB = await messageModel.find().lean();
+        io.emit('messageLogs', messagesDB);
+    });
+
+    socket.on('authenticated', async data => {
+        const messagesDB = await messageModel.find().lean();
+        socket.emit('messageLogs', messagesDB);
+        socket.broadcast.emit('newUserConnected', data);
+    });
 });
 
 app.set('socketio', io);

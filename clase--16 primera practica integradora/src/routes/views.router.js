@@ -50,4 +50,8 @@ router.delete('/realtimeproducts/:pid', async (req, res) => {
     res.send({ status: 'success', result })
 })
 
+router.get('/chat', (req, res) => {
+    res.render('chat');
+})
+
 export default router;
