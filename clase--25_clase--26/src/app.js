@@ -14,6 +14,7 @@ import passport from 'passport';
 import UsersRouter from './routes/users.router.js';
 import ProductsRouter from './routes/products.router.js';
 import CartsRouter from './routes/carts.router.js';
+import config from './config/constants.config.js';
 
 const usersRouter = new UsersRouter();
 const productsRouter = new ProductsRouter();
@@ -54,10 +55,10 @@ app.use('/', viewsRouter);
 
 // Conexión a la DB utilizando mongoose:
 try {
-    await mongoose.connect('mongodb+srv://jonathanjat:VpF0lkWIlIVJGPpu@cluster39760jt.h28fnid.mongodb.net/ecommerce?retryWrites=true&w=majority');
+    await mongoose.connect(config.mongoUrl);
     console.log('DB connected.');
 } catch (error) {
     console.log(error);
 }
 
-const server = app.listen(8080, () => console.log("Server running on port 8080"));
+const server = app.listen(config.port, () => console.log("Server running on port 8080"));

@@ -18,8 +18,8 @@ export default class CartsRouter extends Router {
         this.get('/', ['ADMIN'], passportStrategiesEnum.JWT, this.getAll);
         this.put('/:cid', ['ADMIN'], passportStrategiesEnum.JWT, this.update);
         this.put('/:cid/product/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.updateProductInCart);
-        this.delete('/:cid/product/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.delete);
-        this.delete('/:cid', ['ADMIN'], passportStrategiesEnum.JWT, this.deleteProducts);
+        this.delete('/:cid/product/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.deleteProduct);
+        this.delete('/:cid', ['ADMIN'], passportStrategiesEnum.JWT, this.emptyCart);
     }
 
     async create(req, res) {
@@ -137,7 +137,7 @@ export default class CartsRouter extends Router {
         }
     }
 
-    async delete(req, res) {
+    async deleteProduct(req, res) {
         try {
             const { cid, pid } = req.params;
 
@@ -159,7 +159,7 @@ export default class CartsRouter extends Router {
         }
     }
 
-    async deleteProducts(req, res) {
+    async emptyCart(req, res) {
         try {
             const { cid } = req.params;
 

@@ -15,7 +15,7 @@ export default class ProductsRouter extends Router {
         this.get('/', ['ADMIN'], passportStrategiesEnum.JWT, this.getAll);
         this.get('/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.getById);
         this.put('/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.update);
-        this.delete('/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.delete);
+        this.delete('/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.deleteProduct);
     }
 
     async save(req, res) {
@@ -151,7 +151,7 @@ export default class ProductsRouter extends Router {
         }
     }
 
-    async delete(req, res) {
+    async deleteProduct(req, res) {
         try {
             const { pid } = req.params;
             const result = await productManager.deleteProduct(pid);
