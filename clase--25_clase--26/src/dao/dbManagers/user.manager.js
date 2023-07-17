@@ -1,13 +1,8 @@
-import userModel from '../models/users.model.js';
+import userModel from './models/users.model.js';
 
 export default class Users {
     constructor() {
         console.log('Working users with DB')
-    }
-
-    getUser = async (email) => {
-        const user = await userModel.findOne({ email }).lean();
-        return user;
     }
 
     getUserById = async (id) => {

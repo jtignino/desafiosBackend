@@ -1,27 +1,25 @@
-// import { Router } from 'express';
-// import Carts from '../dao/dbManagers/cart.manager.js';
-// import Products from '../dao/dbManagers/product.manager.js';
-
 import Router from './router.js';
 import Carts from '../dao/dbManagers/cart.manager.js';
 import Products from '../dao/dbManagers/product.manager.js';
 import { passportStrategiesEnum } from '../config/enums.config.js';
+
+import { create, add, getCart, getAll, update, updateProductInCart, deleteProduct, emptyCart } from '../controllers/carts.controller.js';
 
 const cartManager = new Carts();
 const productManager = new Products();
 
 export default class CartsRouter extends Router {
     init() {
-        this.post('/', ['ADMIN'], passportStrategiesEnum.JWT, this.create)
-        this.post('/:cid/product/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.add)
-        this.get('/:cid', ['ADMIN'], passportStrategiesEnum.JWT, this.getCart);
-        this.get('/', ['ADMIN'], passportStrategiesEnum.JWT, this.getAll);
-        this.put('/:cid', ['ADMIN'], passportStrategiesEnum.JWT, this.update);
-        this.put('/:cid/product/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.updateProductInCart);
-        this.delete('/:cid/product/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.deleteProduct);
-        this.delete('/:cid', ['ADMIN'], passportStrategiesEnum.JWT, this.emptyCart);
+        this.post('/', ['ADMIN'], passportStrategiesEnum.JWT, create)
+        this.post('/:cid/product/:pid', ['ADMIN'], passportStrategiesEnum.JWT, add)
+        this.get('/:cid', ['ADMIN'], passportStrategiesEnum.JWT, getCart);
+        this.get('/', ['ADMIN'], passportStrategiesEnum.JWT, getAll);
+        this.put('/:cid', ['ADMIN'], passportStrategiesEnum.JWT, update);
+        this.put('/:cid/product/:pid', ['ADMIN'], passportStrategiesEnum.JWT, updateProductInCart);
+        this.delete('/:cid/product/:pid', ['ADMIN'], passportStrategiesEnum.JWT, deleteProduct);
+        this.delete('/:cid', ['ADMIN'], passportStrategiesEnum.JWT, emptyCart);
     }
-
+    /*
     async create(req, res) {
         try {
             const cart = {
@@ -174,6 +172,7 @@ export default class CartsRouter extends Router {
             res.sendServerError(error.message);
         }
     }
+    */
 }
 
 

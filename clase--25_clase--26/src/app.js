@@ -4,8 +4,6 @@ import handlebars from 'express-handlebars';
 import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
-// import productRouter from './routes/products.router.js';
-// import cartsRouter from './routes/carts.router.js';
 import viewsRouter from './routes/views.router.js';
 import {__dirname} from './utils.js';
 // import sessionsRouter from './routes/sessions.router.js';
@@ -15,6 +13,7 @@ import UsersRouter from './routes/users.router.js';
 import ProductsRouter from './routes/products.router.js';
 import CartsRouter from './routes/carts.router.js';
 import config from './config/constants.config.js';
+import './dao/dbManagers/dbConfig.js';
 
 const usersRouter = new UsersRouter();
 const productsRouter = new ProductsRouter();
@@ -53,12 +52,6 @@ app.use('/api/carts', cartsRouter.getRouter());
 app.use('/', viewsRouter);
 // app.use('/api/sessions', sessionsRouter);
 
-// Conexión a la DB utilizando mongoose:
-try {
-    await mongoose.connect(config.mongoUrl);
-    console.log('DB connected.');
-} catch (error) {
-    console.log(error);
-}
+
 
 const server = app.listen(config.port, () => console.log("Server running on port 8080"));

@@ -1,9 +1,7 @@
-import cartModel from './models/cart.model.js';
+import cartModel from './models/cart.model.js'
 
-export default class Carts {
-    constructor() {
-        console.log('Working carts with DB')
-    }
+export default class CartsDao {
+    constructor() {}
 
     getCarts = async () => {
         const carts = await cartModel.find().lean();
@@ -53,5 +51,4 @@ export default class Carts {
         );
         return result;
     }
-
-};
+}

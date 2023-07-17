@@ -1,14 +1,13 @@
 import productModel from './models/product.model.js';
 
-export default class Products {
-    constructor() {
-        console.log('Working products with DB')
-    }
+export default class ProductsDao {
+    constructor() {}
     
     addProduct = async (product) => {
         const result = await productModel.create(product);
         return result;
     }
+    
     getProducts = async (queryObject, limit, page, sortObject) => {
         const products = await productModel.paginate(queryObject, { limit, page, lean: true, sort: sortObject });
         return products;
