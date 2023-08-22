@@ -1,10 +1,7 @@
 import Router from './router.js';
-import Users from '../dao/dbManagers/user.manager.js';
 import { passportStrategiesEnum } from '../config/enums.config.js';
 
 import { getUser, saveUser, getUsers, getUserById } from '../controllers/users.controller.js';
-
-const usersManager = new Users();
 
 export default class UsersRouter extends Router {
     init() {

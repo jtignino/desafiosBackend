@@ -12,6 +12,8 @@ import { getById as getProductByIdService } from '../services/products.services.
 
 import * as ticketsService from '../services/tickets.services.js';
 
+import * as usersService from '../services/users.services.js';
+
 const create = async (req, res) => {
     try {
         const cart = {
@@ -55,7 +57,7 @@ const getCart = async (req, res) => {
     try {
         const { cid } = req.params;
 
-        const cart = await getProductByIdService(cid);
+        const cart = await getCartByIdService(cid);
 
         if (cart.length === 0) {
             return res.sendClientError('Cart not found.');
@@ -81,7 +83,17 @@ const getAll = async (req, res) => {
 
 const purchase = async (req, res) => {
     try {
-        const { user, products } = req.body;
+        const { cid } = req.params;
+
+        const { user } = req.body;
+
+        const cart = await getCartByIdService(cid);
+
+        if (cart.length === 0) {
+            return res.sendClientError('Cart not found.');
+        }
+        
+        const products = cart[0].products;
 
         const userResult = await usersService.getUserById(user);
 
@@ -89,9 +101,9 @@ const purchase = async (req, res) => {
             return res.sendClientError('User not found.');
         };
 
-        const result = await ticketsService.purchase(user, products);
+        const {result, backorderCart} = await ticketsService.purchase(userResult, products);
 
-        res.sendSuccess(result);
+        res.sendSuccess({result, backorderCart});
 
     } catch (error) {
         res.sendServerError(error.message);

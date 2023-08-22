@@ -15,10 +15,9 @@ export default class MongoSingleton {
     static #instance;
 
     constructor() {
-        connection = async () => { 
-            await mongoose.connect(URI);
-            console.log('DB connected.'); 
-        }
+        mongoose.connect(URI);
+        console.log('DB connected.'); 
+        
     }
 
     static getInstance() {

@@ -11,7 +11,7 @@ const purchase = async (req, res) => {
             return res.sendClientError('User not found.');
         };
 
-        const result = await ticketsService.purchase(user, products);
+        const result = await ticketsService.purchase(userResult, products);
 
         res.sendSuccess(result);
 

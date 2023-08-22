@@ -3,14 +3,13 @@ import config from '../../config/constants.config.js';
 
 const MONGO_URL = config.mongoUrl;
 
+
 export default class MongoSingleton {
     static #instance;
 
     constructor() {
-        connection = async () => { 
-            await mongoose.connect(MONGO_URL);
-            console.log('DB connected.'); 
-        }
+        mongoose.connect(MONGO_URL);
+        console.log('*** DB connected. ***'); 
     }
 
     static getInstance() {
@@ -19,7 +18,7 @@ export default class MongoSingleton {
             return this.#instance;
         }
 
-        console.log('La conexión no existe, se crea una nueva');
+        console.log('* La conexión no existe, se crea una nueva.');
         this.#instance = new MongoSingleton();
         return this.#instance;
     }

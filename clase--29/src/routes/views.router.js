@@ -1,11 +1,10 @@
+/* 
 import { Router } from "express";
 import ProductManager from '../dao/fileManagers/product.manager.js';
 import Products from '../dao/dbManagers/product.manager.js';
 
 const router = Router();
 const productManager = new Products();
-// const productManager = new ProductManager('./src/files/Productos.json');
-
 
 const publicAccess = (req, res, next) => {
     if (req.session.user) return res.redirect('/products');
@@ -100,3 +99,5 @@ router.get('/products', privateAccess, async (req, res) => {
 
 
 export default router;
+
+*/

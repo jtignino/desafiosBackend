@@ -1,10 +1,7 @@
 import Router from './router.js';
-import Products from '../dao/dbManagers/product.manager.js';
 import { passportStrategiesEnum } from '../config/enums.config.js';
 
 import { save, getAll, getById, update, deleteProduct } from '../controllers/products.controller.js';
-
-const productManager = new Products();
 
 export default class ProductsRouter extends Router {
     init() {
