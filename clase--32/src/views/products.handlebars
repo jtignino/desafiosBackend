@@ -1,0 +1,38 @@
+<div>
+    <div>
+        <h1>Bienvenido {{user.first_name}}! [{{user.role}}]</h1>
+        <br>
+        <h2>Tu perfil:</h2>
+        <p>Correo electrónico: {{user.email}}</p>
+        {{#if user.age}}
+        <p>Edad: {{user.age}}</p>
+        {{/if}}
+        <br>
+        <a href="/api/sessions/logout"><button>Cerrar sesión</button></a>
+    </div>
+
+    <h2>Todos los productos:</h2>
+    <div>
+        {{#each payload}}
+        <ul>
+            <li>Título: {{this.title}}</li>
+            <li>Descripción: {{this.description}}</li>
+            <li>Precio: {{this.price}}</li>
+            <li>Stock: {{this.stock}}</li>
+            <li>Id: {{this._id}}</li>
+            <button onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
+            <hr>
+        </ul>
+        {{/each}}
+
+        {{#if hasPrevPage}}
+        <a href="/products{{prevLink}}"><button>Anterior</button></a>
+        {{/if}}
+
+        {{#if hasNextPage}}
+        <a href="/products{{nextLink}}"><button>Siguiente</button></a>
+        {{/if}}
+    </div>
+</div>
+
+<script src="/js/products.js"></script>
