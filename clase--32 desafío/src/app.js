@@ -9,6 +9,7 @@ import passport from 'passport';
 import UsersRouter from './routes/users.router.js';
 import ProductsRouter from './routes/products.router.js';
 import CartsRouter from './routes/carts.router.js';
+import MockingRouter from './routes/mocking.router.js';
 import config from './config/constants.config.js';
 import MongoSingleton from './dao/dbManagers/dbConfig.js';
 
@@ -20,6 +21,7 @@ const connectBDD = MongoSingleton.getInstance();
 const usersRouter = new UsersRouter();
 const productsRouter = new ProductsRouter();
 const cartsRouter = new CartsRouter();
+const mockingRouter = new MockingRouter();
 
 const app = express();
 
@@ -94,6 +96,7 @@ app.set('view engine', 'handlebars');
 app.use('/api/users', usersRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
 app.use('/api/carts', cartsRouter.getRouter());
+app.use('/mocking-products', mockingRouter.getRouter());
 
 // app.use('/', viewsRouter);
 
