@@ -11,5 +11,5 @@ export default {
     twilioAuthToken: process.env.TWILIO_AUTH_TOKEN,
     twilioPhoneNumber: process.env.TWILIO_PHONE_NUMBER,
     smsNumberTo: process.env.SMS_NUMBER_TO,
-    
+    nodeEnv: process.env.NODE_ENV
 }

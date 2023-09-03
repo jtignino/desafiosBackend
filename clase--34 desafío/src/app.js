@@ -4,7 +4,7 @@ import cors from 'cors';
 import nodemailer from 'nodemailer';
 import twilio from 'twilio';
 // import viewsRouter from './routes/views.router.js';
-import { __dirname } from './utils.js';
+import { __dirname, logger } from './utils.js';
 import initializePassport from './config/passport.config.js';
 import passport from 'passport';
 import UsersRouter from './routes/users.router.js';
@@ -80,6 +80,16 @@ app.post('/whatsapp', async (req, res) => {
     });
 
     res.send('Whatsapp enviado.')
+});
+
+
+app.get('/loggerTest', (req, res) => {
+    logger.fatal('Prueba fatal');
+    logger.error('Prueba error');
+    logger.warning('Prueba warn');
+    logger.info('Prueba info');
+    logger.http('Prueba http');
+    logger.debug('Prueba debug');
 });
 
 app.set('views', `${__dirname}/views`);

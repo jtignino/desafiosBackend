@@ -4,6 +4,8 @@ import config from "./config/constants.config.js"
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+import winston from 'winston';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -18,9 +20,61 @@ const generateToken = (user) => {
     return token;
 };
 
+const customLevelOptions = {
+    levels: {
+        fatal: 0,
+        error: 1,
+        warning: 2,
+        info: 3,
+        http: 4,
+        debug: 5
+    },
+    colors: {
+        fatal: 'red',
+        error: 'red',
+        warning: 'yellow',
+        info: 'green',
+        http: 'green',
+        debug: 'blue'
+    }
+}
+
+let logger;
+
+if (config.nodeEnv === 'production') {
+    logger = winston.createLogger({
+        levels: customLevelOptions.levels,
+        transports: [
+            new winston.transports.Console({
+                level: 'info'
+            }),
+            new winston.transports.File({
+                filename: 'logs/errors.log',
+                level: 'error'
+            })
+        ]
+    });
+} else {
+    logger = winston.createLogger({
+        levels: customLevelOptions.levels,
+        transports: [
+            new winston.transports.Console({
+                level: 'debug'
+            })
+        ]
+    });
+}
+
+// const addLogger = (req, res, next) => {
+//     req.logger = logger;
+//     req.logger.info(`${req.method} en ${req.url} - ${new Date().toISOString()}`);
+//     next();
+// }
+
 export {
     __dirname,
     createHash,
     isValidPassword,
-    generateToken
+    generateToken,
+    logger
 }
