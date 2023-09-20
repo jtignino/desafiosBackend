@@ -79,10 +79,10 @@ const purchase = async (req, res) => {
         const { user } = req.body;
 
         const cart = await cartsService.getById(cid);
-        // console.log(cart)
+
         const products = cart.products;
 
-        const userResult = await usersService.getUserById(user);
+        const userResult = await usersService.getUserByEmail(user);
 
         const { result, backorderCart } = await ticketsService.purchase(userResult, products);
 
@@ -101,31 +101,30 @@ const update = async (req, res) => {
     try {
         const { cid } = req.params;
         const products = req.body;
+        const productsNotFound = [];
         let result;
 
-        await cartsService.getCartById(cid);
-
-        // if (cart.length === 0) {
-        //     return res.sendClientError('Cart not found.');
-        // }
-
-        // products.forEach(async product => {
-        //     const result = await cartsService.updateProductInCart(cid, product.product, product.quantity);
-
-        //     (result === null) && (await cartsService.addCart(cid, product.product, product.quantity));
-        // });
+        await cartsService.getById(cid);
 
         for (const product of products) {
             result = await cartsService.updateProductInCart(cid, product.product, product.quantity);
 
-            (result === null) && (await cartsService.add(cid, product.product, product.quantity));
+            if (!result) {
+                result = await cartsService.add(cid, product.product, product.quantity);
+
+                if (result === product.product) {
+                    productsNotFound.push({ _id: product.product });
+                }
+            }
         };
 
-        // const result = await cartsService.getCartById(cid);
+        // result = await cartsService.getById(cid);
 
-        res.sendSuccess(result);
+        res.sendSuccess({ result, productsNotFound });
     } catch (error) {
         if (error instanceof CartNotFound) return res.sendClientError(error.message);
+
+        // if (error instanceof ProductNotFound) return res.sendClientError(error.message);
 
         res.sendServerError(error.message);
     }
@@ -134,24 +133,18 @@ const update = async (req, res) => {
 const updateProductInCart = async (req, res) => {
     try {
         const { cid, pid } = req.params;
-        const { qty = 1 } = req.body;
+        const { quantity = 1 } = req.body;
+
+        await cartsService.getById(cid);
 
         await productsService.getProductById(pid);
 
-        // if (product.length === 0) {
-        //     return res.sendClientError('Product not found.');
-        // }
-
-        const result = await cartsService.updateProductInCart(cid, pid, qty);
-
-        if (result === null) {
-            return res.sendClientError('Cart not found.');
-        }
+        const result = await cartsService.updateProductInCart(cid, pid, quantity);
 
         res.sendSuccess(result);
     } catch (error) {
         if (error instanceof ProductNotFound) return res.sendClientError(error.message);
-        
+
         if (error instanceof CartNotFound) return res.sendClientError(error.message);
 
         res.sendServerError(error.message);
@@ -164,22 +157,14 @@ const deleteProduct = async (req, res) => {
 
         await productsService.getProductById(pid);
 
-        // if (product.length === 0) {
-        //     return res.sendClientError('Product not found.');
-        // }
-
         const result = await cartsService.deleteProduct(cid, pid);
-
-        // if (result === null) {
-        //     return res.sendClientError('Cart not found.');
-        // }
 
         res.sendSuccess(result);
     } catch (error) {
         if (error instanceof ProductNotFound) return res.sendClientError(error.message);
-        
+
         if (error instanceof DeleteProductError) return res.sendClientError(error.message);
-        
+
         res.sendServerError(error.message);
     }
 }
@@ -189,10 +174,6 @@ const emptyCart = async (req, res) => {
         const { cid } = req.params;
 
         const result = await cartsService.emptyCart(cid);
-
-        // if (result === null) {
-        //     return res.sendClientError('Cart not found.');
-        // }
 
         res.sendSuccess(result);
     } catch (error) {

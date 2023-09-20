@@ -23,7 +23,6 @@ const login = async (user, password) => {
     if (!comparePassword) 
         throw new IncorrectLoginCredentials('Incorrect credentials.');
 
-    // delete user.password;
     const accessToken = generateToken(user);
 
     // const email = {

@@ -6,11 +6,7 @@ const purchase = async (req, res) => {
     try {
         const { user, products } = req.body;
 
-        const userResult = await usersService.getUserById(user);
-
-        // if(!userResult) {
-        //     return res.sendClientError('User not found.');
-        // };
+        const userResult = await usersService.getUserByEmail(user);
 
         const result = await ticketsService.purchase(userResult, products);
 

@@ -1,3 +1,4 @@
+/*
 import mongoUserDao from './dbManagers/classes/users.dao.js'
 import mongoCartDao from './dbManagers/classes/carts.dao.js'
 import mongoProductDao from './dbManagers/classes/products.dao.js'
@@ -12,3 +13,4 @@ const MongoProductDao = new mongoProductDao();
 export const USERSDAO = MongoUserDao;
 export const CARTSDAO = MongoCartDao;
 export const PRODUCTSDAO = MongoProductDao;
+*/

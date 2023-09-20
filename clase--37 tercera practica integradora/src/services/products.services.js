@@ -80,11 +80,18 @@ const deleteProduct = async (pid) => {
     return product;
 }
 
+const findProduct = async (pid) => {
+    const product = await productsRepository.getProductById(pid);
+
+    return product;
+}
+
 export {
     saveProduct,
     getAllProducts,
     getProductById,
     getByCode,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    findProduct
 }

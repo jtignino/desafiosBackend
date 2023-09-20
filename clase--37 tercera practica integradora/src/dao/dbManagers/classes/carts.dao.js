@@ -38,7 +38,8 @@ export default class CartsDao {
     deleteProduct = async (cid, pid) => {
         const result = await cartModel.findOneAndUpdate(
             { _id: cid },
-            { $pull: { products: { product: pid } } }
+            { $pull: { products: { product: pid } } },
+            { new: true }
         );
         return result;
     }

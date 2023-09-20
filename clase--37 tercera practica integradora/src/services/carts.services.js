@@ -1,7 +1,11 @@
 import CartsRepository from '../repositories/carts.repository.js';
+import { findProduct } from '../services/products.services.js';
 import { CartNotFound, DeleteProductError } from '../utils/custom-exception.js';
 
-const cartsRepository = new CartsRepository();
+import { Carts } from '../dao/factory.js';
+
+const carts = new Carts();
+const cartsRepository = new CartsRepository(carts);
 
 const create = async (cart) => {
     const result = await cartsRepository.createCart(cart);
@@ -22,7 +26,12 @@ const getById = async (cid) => {
 }
 
 const add = async (cid, pid, qty) => {
+    const product = await findProduct(pid);
+    
+    if (!product) return pid;
+
     const result = await cartsRepository.addToCart(cid, pid, qty);
+
     return result;
 }
 
@@ -41,11 +50,12 @@ const deleteProduct = async (cid, pid) => {
 
 const emptyCart = async (cid, pid) => {
     const result = await cartsRepository.emptyCart(cid);
-    
+
     if (!result) throw new CartNotFound('Cart not found.');
 
     return result;
 }
+
 export {
     create,
     getAll,
