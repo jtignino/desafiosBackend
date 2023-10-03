@@ -15,3 +15,15 @@ async function addToCart(id) {
         console.log(error);
     }
 }
+
+function logout() {
+    try {
+        console.log('click en el boton')
+        fetch('/logout').then(resp => window.location.replace(`${resp.url}`))
+        // fetch('/logout').then(resp => window.location.replace('/login'))
+        console.log('despues del fetch')
+
+    } catch (error) {
+        console.log(error);
+    }
+}

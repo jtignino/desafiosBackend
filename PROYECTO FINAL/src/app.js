@@ -1,9 +1,10 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import twilio from 'twilio';
-// import viewsRouter from './routes/views.router.js';
+import ViewsRouter from './routes/views.router.js';
 import { __dirname, logger } from './utils/utils.js';
 import initializePassport from './config/passport.config.js';
 import passport from 'passport';
@@ -18,6 +19,7 @@ import config from './config/constants.config.js';
 const usersRouter = new UsersRouter();
 const productsRouter = new ProductsRouter();
 const cartsRouter = new CartsRouter();
+const viewsRouter = new ViewsRouter();
 
 const app = express();
 
@@ -28,6 +30,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(`${__dirname}/public`));
+app.use(cookieParser());
 
 initializePassport();
 app.use(passport.initialize());
@@ -89,7 +92,6 @@ app.set('view engine', 'handlebars');
 app.use('/api/users', usersRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
 app.use('/api/carts', cartsRouter.getRouter());
-
-// app.use('/', viewsRouter);
+app.use('/', viewsRouter.getRouter());
 
 const server = app.listen(config.port, () => console.log(`Server running on port ${config.port}`));

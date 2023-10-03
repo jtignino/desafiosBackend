@@ -10,7 +10,7 @@ form.addEventListener('submit', e => {
         obj[key] = stringValue
     });
 
-    fetch('/api/sessions/register', {
+    fetch('/api/users/register', {
         method: 'POST',
         body: JSON.stringify(obj),
         headers: {

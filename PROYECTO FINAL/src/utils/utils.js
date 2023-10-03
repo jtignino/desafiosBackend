@@ -1,5 +1,5 @@
 import { fileURLToPath } from "url";
-import { dirname } from "path";
+import { dirname, join } from "path";
 import config from "../config/constants.config.js"
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -7,7 +7,8 @@ import nodemailer from 'nodemailer';
 import winston from 'winston';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const path = dirname(__filename);
+const __dirname = join(path, "..");
 
 const createHash = password =>
     bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -16,7 +17,7 @@ const isValidPassword = (user, password) =>
     bcrypt.compareSync(password, user.password);
 
 const generateToken = (user) => {
-    const token = jwt.sign({ user }, config.privateKey, { expiresIn: '24h' });
+    const token = jwt.sign({ user }, config.privateKey, { expiresIn: '1h' });
     return token;
 };
 

@@ -1,4 +1,5 @@
 import * as usersService from '../services/users.services.js';
+import * as cartsService from '../services/carts.services.js';
 import { UserNotFound, IncorrectLoginCredentials, UserAlreadyExists } from '../utils/custom-exception.js';
 
 
@@ -9,8 +10,9 @@ const login = async (req, res) => {
         const user = await usersService.getUserByEmail(email);
 
         const accessToken = await usersService.login(user, password);
-
-        res.sendSuccess({ accessToken });
+        
+        res.cookie('coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }).sendSuccess('Log in success.')
+        // res.sendSuccess({ accessToken });
     } catch (error) {
         if (error instanceof UserNotFound) return res.sendClientError(error.message);
 
@@ -24,12 +26,14 @@ const register = async (req, res) => {
     try {
         const { first_name, last_name, role, email, password } = req.body;
 
-        if (!first_name || !last_name || !role || !email || !password)
+        if (!first_name || !last_name || !email || !password)
             return res.sendClientError('Incomplete values.');
 
         await usersService.getUserRegister(email);
 
-        const register = await usersService.register({ ...req.body });
+        const cart = await cartsService.create();
+
+        const register = await usersService.register({ ...req.body, cart });
 
         res.sendSuccess(register);
 
@@ -65,9 +69,19 @@ const getUserById = async (req, res) => {
     }
 }
 
+const prueba = async (req, res) => {
+    try {
+        // res.clearCookie('coderCookieToken').send('ok')
+        console.log("hola mundo")
+    } catch (error) {
+        res.sendServerError(error.message);
+    }
+}
+
 export {
     login,
     register,
     getUsers,
-    getUserById
+    getUserById,
+    prueba
 }

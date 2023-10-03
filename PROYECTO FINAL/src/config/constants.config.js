@@ -7,6 +7,7 @@ export default {
     mongoUrl: process.env.MONGO_URL,
     persistence: process.env.PERSISTENCE,
     privateKey: process.env.PRIVATE_KEY,
+    cookieKey: process.env.COOKIE_KEY,
     nodemailerUser: process.env.NODEMAILER_USER,
     nodemailerPass: process.env.NODEMAILER_PASS,
     twilioAccountSID: process.env.TWILIO_ACCOUNT_SID,

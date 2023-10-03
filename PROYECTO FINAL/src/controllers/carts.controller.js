@@ -6,11 +6,7 @@ import { CartNotFound, DeleteProductError, ProductNotFound, ProductUpdateError, 
 
 const create = async (req, res) => {
     try {
-        const cart = {
-            products: []
-        };
-
-        const result = await cartsService.create(cart);
+        const result = await cartsService.create();
 
         res.sendSuccess(result);
     } catch (error) {

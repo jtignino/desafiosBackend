@@ -10,7 +10,7 @@ const ExtractJWT = jwt.ExtractJwt;
 
 const initializePassport = () => {
     passport.use('jwt', new JWTStrategy({
-        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
         secretOrKey: config.privateKey
     }, async (jwt_payload, done) => {
         try {
@@ -19,6 +19,17 @@ const initializePassport = () => {
             return done(error);
         }
     }));
+
+    // passport.use('jwt', new JWTStrategy({
+    //     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    //     secretOrKey: config.privateKey
+    // }, async (jwt_payload, done) => {
+    //     try {
+    //         return done(null, jwt_payload.user);
+    //     } catch (error) {
+    //         return done(error);
+    //     }
+    // }));
 
     /*
     passport.use('github', new GitHubStrategy({
@@ -60,6 +71,14 @@ const initializePassport = () => {
         done(null, user);
     });
     */
+}
+
+const cookieExtractor = req => {
+    let token = null;
+    if (req && req.cookies) {
+        token = req.cookies['coderCookieToken'];
+    }
+    return token;
 }
 
 export default initializePassport;

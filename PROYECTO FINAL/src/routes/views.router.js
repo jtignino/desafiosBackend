@@ -1,28 +1,35 @@
-/* 
-import { Router } from "express";
-import ProductManager from '../dao/fileManagers/product.manager.js';
-import Products from '../dao/dbManagers/product.manager.js';
+import Router from './router.js';
+import { passportStrategiesEnum } from '../config/enums.config.js';
+// import { register } from '../controllers/users.controller.js';
+import { login, logout, products, register } from '../controllers/views.controller.js';
 
-const router = Router();
-const productManager = new Products();
-
-const publicAccess = (req, res, next) => {
-    if (req.session.user) return res.redirect('/products');
-    next();
-};
-
-
-const privateAccess = (req, res, next) => {
-    if (!req.session.user) return res.redirect('/login');
-    next();
-};
+export default class ViewsRouter extends Router {
+    init() {
+        this.get('/register', ['PUBLIC'], passportStrategiesEnum.NOTHING, register)
+        this.get('/login', ['PUBLIC'], passportStrategiesEnum.NOTHING, login)
+        this.get('/logout', ['PUBLIC'], passportStrategiesEnum.NOTHING, logout)
+        this.get('/products', ['PUBLIC'], passportStrategiesEnum.JWT, products)
+    }
+}
 
 
-router.get('/register', publicAccess, (req, res) => {
-    res.render('register');
-});
+// const publicAccess = (req, res, next) => {
+//     if (req.session.user) return res.redirect('/products');
+//     next();
+// };
 
 
+// const privateAccess = (req, res, next) => {
+//     if (!req.session.user) return res.redirect('/login');
+//     next();
+// };
+
+
+// router.get('/register', publicAccess, (req, res) => {
+//     res.render('register');
+// });
+
+/*
 router.get('/login', publicAccess, (req, res) => {
     res.render('login');
 });
@@ -96,8 +103,5 @@ router.get('/products', privateAccess, async (req, res) => {
         res.status(500).send({ status: 'error', error });
     }
 });
-
-
-export default router;
 
 */

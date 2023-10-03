@@ -7,7 +7,8 @@ import { Carts } from '../dao/factory.js';
 const carts = new Carts();
 const cartsRepository = new CartsRepository(carts);
 
-const create = async (cart) => {
+const create = async () => {
+    const cart = { products: [] };
     const result = await cartsRepository.createCart(cart);
     return result;
 }
