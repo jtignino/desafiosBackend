@@ -1,7 +1,6 @@
 import passport from 'passport';
 import jwt from 'passport-jwt';
 import GitHubStrategy from 'passport-github2';
-// import Users from '../dao/dbManagers/user.manager.js';
 import config from './constants.config.js';
 
 // const userManager = new Users();

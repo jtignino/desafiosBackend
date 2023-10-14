@@ -18,22 +18,11 @@ form.addEventListener('submit', (event) => {
             'Content-Type': 'application/json'
         }
     })
-    // .then(res => {
-
-    //     if (res.status === 200) {
-    //         window.location.replace('/products');
-    //     } 
-    //     res.json()
-    // })
     .then(res => {
         if (res.status !== 200) return res.json();
         else window.location.replace('/products');
     })
     .then(result => {
         console.log(result)
-        // if (result.data?.accessToken) {
-        //     console.log(result.data.accessToken)
-        //     // window.location.replace('/products');
-        // }
     })
 });

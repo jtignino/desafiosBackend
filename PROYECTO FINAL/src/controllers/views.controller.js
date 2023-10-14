@@ -27,7 +27,6 @@ const products = async (req, res) => {
         const result = await productsService.getAllProducts(query, limit, page, sort);
     
         res.render('products', {
-            status: 'success',
             user: {
                 first_name: req.user.first_name,
                 email: req.user.email,
@@ -44,10 +43,9 @@ const products = async (req, res) => {
 const logout = (req, res) => {
     try {
         console.log('antes de borrar la cookie')
-        res.clearCookie('coderCookieToken').redirect('/login')
-        // res.clearCookie('coderCookieToken').sendSuccess('ok')
-        // res.redirect('/login')
-        console.log('despues de borrar la cookie')
+        res.clearCookie('coderCookieToken')
+        
+        res.redirect('/login')
 
     } catch (error) {
         res.sendServerError(error.message);

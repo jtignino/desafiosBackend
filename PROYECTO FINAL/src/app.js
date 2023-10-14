@@ -11,6 +11,7 @@ import passport from 'passport';
 import UsersRouter from './routes/users.router.js';
 import ProductsRouter from './routes/products.router.js';
 import CartsRouter from './routes/carts.router.js';
+import SessionsRouter from './routes/sessions.router.js';
 import config from './config/constants.config.js';
 // import MongoSingleton from './dao/dbManagers/dbConfig.js';
 
@@ -20,6 +21,7 @@ const usersRouter = new UsersRouter();
 const productsRouter = new ProductsRouter();
 const cartsRouter = new CartsRouter();
 const viewsRouter = new ViewsRouter();
+const sessionsRouter = new SessionsRouter();
 
 const app = express();
 
@@ -30,7 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(`${__dirname}/public`));
-app.use(cookieParser());
+app.use(cookieParser(config.cookieSecret));
 
 initializePassport();
 app.use(passport.initialize());
@@ -92,6 +94,7 @@ app.set('view engine', 'handlebars');
 app.use('/api/users', usersRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
 app.use('/api/carts', cartsRouter.getRouter());
+app.use('/api/sessions', sessionsRouter.getRouter());
 app.use('/', viewsRouter.getRouter());
 
 const server = app.listen(config.port, () => console.log(`Server running on port ${config.port}`));

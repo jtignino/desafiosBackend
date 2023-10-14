@@ -24,7 +24,7 @@ export default class Router {
         );
     };
 
-    post(path, policies, passportStrategy,...callbacks) {
+    post(path, policies, passportStrategy, ...callbacks) {
         this.router.post(
             path,
             this.applyCustomPassportCall(passportStrategy),

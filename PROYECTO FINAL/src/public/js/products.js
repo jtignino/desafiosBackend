@@ -1,12 +1,12 @@
 console.log('Script products');
-const cid = '646721713b94cbd0e0df8ad1';
+let cid;
 
 async function addToCart(id) {
     try {
         const res = await fetch(`api/carts/${cid}/product/${id}`, {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify({ qty: 11 })
+            body: JSON.stringify({ qty: 2 })
         });
 
         const response = await res.json();
@@ -18,12 +18,31 @@ async function addToCart(id) {
 
 function logout() {
     try {
-        console.log('click en el boton')
-        fetch('/logout').then(resp => window.location.replace(`${resp.url}`))
-        // fetch('/logout').then(resp => window.location.replace('/login'))
-        console.log('despues del fetch')
-
+        fetch('/logout').then(resp => window.location.replace(`${resp.url}`));
     } catch (error) {
         console.log(error);
     }
 }
+
+async function getCartId() {
+    try {
+        if (localStorage.getItem('cid')) {
+            return localStorage.getItem('cid');
+        } else {
+            const res = await fetch('/api/sessions/current')
+            const userData = await res.json();
+
+            if (userData.data.role !== 'admin') {
+                console.log(userData.data.cart);
+                localStorage.setItem('cid', userData.data.cart);
+                console.log('Valor "cid" guardado en localStorage:', userData.data.cart);
+            }
+        }
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+getCartId().then(res => { cid = res });
+

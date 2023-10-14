@@ -17,7 +17,10 @@ const isValidPassword = (user, password) =>
     bcrypt.compareSync(password, user.password);
 
 const generateToken = (user) => {
+    delete user.password;
+
     const token = jwt.sign({ user }, config.privateKey, { expiresIn: '1h' });
+    
     return token;
 };
 

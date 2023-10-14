@@ -11,8 +11,18 @@ const login = async (req, res) => {
 
         const accessToken = await usersService.login(user, password);
         
-        res.cookie('coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }).sendSuccess('Log in success.')
-        // res.sendSuccess({ accessToken });
+        res.cookie('coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true, sameSite: 'none', secure: true })
+        
+        // if (user.role === 'admin') {
+        //     return res.sendSuccess('Log in success ADMIN.');
+        // } else if (req && !req.signedCookies['cartId']) {
+        //     console.log('Log en user.controller signedCookies')
+        //     console.log(user.cart.toString())
+        //     res.cookie('cartId', user.cart.toString(), { sameSite: 'none', secure: true })
+        // }
+
+        res.sendSuccess('Log in success.');
+
     } catch (error) {
         if (error instanceof UserNotFound) return res.sendClientError(error.message);
 
@@ -69,19 +79,10 @@ const getUserById = async (req, res) => {
     }
 }
 
-const prueba = async (req, res) => {
-    try {
-        // res.clearCookie('coderCookieToken').send('ok')
-        console.log("hola mundo")
-    } catch (error) {
-        res.sendServerError(error.message);
-    }
-}
 
 export {
     login,
     register,
     getUsers,
-    getUserById,
-    prueba
+    getUserById
 }

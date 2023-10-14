@@ -16,9 +16,16 @@ form.addEventListener('submit', e => {
         headers: {
             'Content-Type': 'application/json'
         }
-    }).then(result => {
-        if (result.status === 200) {
-            window.location.replace('/products');
-        }
-    });
+    })
+    .then(res => {
+        if (res.status !== 200) return res.json();
+        else window.location.replace('/login');
+    })
+    .then(result => {
+        console.log(result)
+        // if (result.data?.accessToken) {
+        //     console.log(result.data.accessToken)
+        //     // window.location.replace('/products');
+        // }
+    })
 })
