@@ -1,5 +1,4 @@
 console.log('Script products');
-let cid;
 
 async function addToCart(id) {
     try {
@@ -18,31 +17,45 @@ async function addToCart(id) {
 
 function logout() {
     try {
-        fetch('/logout').then(resp => window.location.replace(`${resp.url}`));
+        console.log('click en el boton')
+        fetch('/logout').then(resp => window.location.replace(`${resp.url}`))
+        // fetch('/logout').then(resp => window.location.replace('/login'))
+        console.log('despues del fetch')
+
     } catch (error) {
         console.log(error);
     }
 }
 
-async function getCartId() {
-    try {
-        if (localStorage.getItem('cid')) {
-            return localStorage.getItem('cid');
-        } else {
-            const res = await fetch('/api/sessions/current')
-            const userData = await res.json();
+// function getCookie(nameCookie) {
+//     // Hacer que la funcion haga un fetch a /api/sessions/current y guarde el valor del cid en el localStorage
+//     const allCookies = document.cookie;
 
-            if (userData.data.role !== 'admin') {
-                console.log(userData.data.cart);
-                localStorage.setItem('cid', userData.data.cart);
-                console.log('Valor "cid" guardado en localStorage:', userData.data.cart);
-            }
+//     const cookies = allCookies.split(';');
+
+//     for (const cookie of cookies) {
+//         const [key, value] = cookie.trim().split('=');
+
+//         if (key === nameCookie) {
+//             return value;
+//         }
+//     }
+//     return null;
+// }
+
+function getCartId(cid) {
+    const allCookies = document.cookie;
+
+    const cookies = allCookies.split(';');
+
+    for (const cookie of cookies) {
+        const [key, value] = cookie.trim().split('=');
+
+        if (key === cid) {
+            return value;
         }
-    } catch (error) {
-        console.log(error)
     }
-
+    return null;
 }
 
-getCartId().then(res => { cid = res });
-
+const cid = getCartId('cartId');

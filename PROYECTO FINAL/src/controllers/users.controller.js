@@ -13,13 +13,13 @@ const login = async (req, res) => {
         
         res.cookie('coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true, sameSite: 'none', secure: true })
         
-        // if (user.role === 'admin') {
-        //     return res.sendSuccess('Log in success ADMIN.');
-        // } else if (req && !req.signedCookies['cartId']) {
-        //     console.log('Log en user.controller signedCookies')
-        //     console.log(user.cart.toString())
-        //     res.cookie('cartId', user.cart.toString(), { sameSite: 'none', secure: true })
-        // }
+        if (user.role === 'admin') {
+            return res.sendSuccess('Log in success ADMIN.');
+        } else if (req && !req.signedCookies['cartId']) {
+            console.log('Log en user.controller signedCookies')
+            console.log(user.cart.toString())
+            res.cookie('cartId', user.cart.toString(), { sameSite: 'none', secure: true })
+        }
 
         res.sendSuccess('Log in success.');
 

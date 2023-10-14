@@ -42,10 +42,11 @@ const products = async (req, res) => {
 
 const logout = (req, res) => {
     try {
-        console.log('antes de borrar la cookie')
-        res.clearCookie('coderCookieToken')
-        
-        res.redirect('/login')
+        res.clearCookie('coderCookieToken');
+
+        res.clearCookie('cartId');
+
+        res.redirect('/login');
 
     } catch (error) {
         res.sendServerError(error.message);
