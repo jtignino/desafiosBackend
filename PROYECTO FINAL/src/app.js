@@ -1,18 +1,20 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
-import cors from 'cors';
 import cookieParser from 'cookie-parser';
-
-import twilio from 'twilio';
-import ViewsRouter from './routes/views.router.js';
-import { __dirname, logger } from './utils/utils.js';
-import initializePassport from './config/passport.config.js';
 import passport from 'passport';
+import cors from 'cors';
+import twilio from 'twilio';
+
 import UsersRouter from './routes/users.router.js';
 import ProductsRouter from './routes/products.router.js';
 import CartsRouter from './routes/carts.router.js';
+import ViewsRouter from './routes/views.router.js';
 import SessionsRouter from './routes/sessions.router.js';
+
+import { __dirname, logger } from './utils/utils.js';
+import initializePassport from './config/passport.config.js';
 import config from './config/constants.config.js';
+
 // import MongoSingleton from './dao/dbManagers/dbConfig.js';
 
 // const connectBDD = MongoSingleton.getInstance();
@@ -38,17 +40,6 @@ initializePassport();
 app.use(passport.initialize());
 
 app.engine('handlebars', handlebars.engine());
-
-// app.get('/mail', async (req, res) => {
-//     await transporter.sendMail({
-//         from: 'JT Test',
-//         to: 'jonathan.jat@hotmail.com',
-//         subject: 'Correo de prueba de mailing',
-//         html: '<div><h1>Este es un correo de prueba de mailing de la clase 30.</h1></div>'
-//     });
-
-//     res.send('Correo enviado');    
-// });
 
 const client = twilio(
     config.twilioAccountSID,

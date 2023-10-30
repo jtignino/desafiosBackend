@@ -1,6 +1,5 @@
-console.log('Login.js')
-const form = document.getElementById('loginForm');
-
+console.log('Forgot password.js')
+const form = document.getElementById('forgotForm');
 
 form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -12,7 +11,7 @@ form.addEventListener('submit', (event) => {
         obj[key] = stringValue
     });
 
-    fetch('/api/users/login', {
+    fetch('/api/users/forgotPassword', {
         method: 'POST',
         body: JSON.stringify(obj),
         headers: {
@@ -21,7 +20,7 @@ form.addEventListener('submit', (event) => {
     })
     .then(res => {
         if (res.status !== 200) return res.json();
-        else window.location.replace('/products');
+        else window.location.replace('/login');
     })
     .then(result => {
         console.log(result)

@@ -1,16 +1,17 @@
 import Router from './router.js';
 import { passportStrategiesEnum } from '../config/enums.config.js';
 
-import { login, register, getUsers, getUserById } from '../controllers/users.controller.js';
+import { login, register, forgotPassword, resetPassword, getUsers, getUserById } from '../controllers/users.controller.js';
 
 export default class UsersRouter extends Router {
     init() {
-        this.post('/login', ['PUBLIC'], passportStrategiesEnum.NOTHING, login);
-        this.post('/register', ['PUBLIC'], passportStrategiesEnum.NOTHING, register);
-        this.get('/', ['ADMIN'], passportStrategiesEnum.NOTHING, getUsers);
-        this.get('/:id', ['ADMIN'], passportStrategiesEnum.NOTHING, getUserById);
+        this.post('/login', ['PUBLIC'], passportStrategiesEnum.NOTHING, 'coderCookieToken', login);
+        this.post('/register', ['PUBLIC'], passportStrategiesEnum.NOTHING, 'coderCookieToken', register);
+        this.post('/forgotPassword', ['PUBLIC'], passportStrategiesEnum.NOTHING, 'coderCookieToken', forgotPassword);
+        this.post('/resetPassword', ['PUBLIC'], passportStrategiesEnum.JWT, 'resetAccessToken', resetPassword);
+        this.get('/', ['ADMIN'], passportStrategiesEnum.JWT, 'coderCookieToken', getUsers);
+        this.get('/:id', ['ADMIN'], passportStrategiesEnum.NOTHING, 'coderCookieToken', getUserById);
 
         // this.delete('/', ['ADMIN'], passportStrategiesEnum.JWT, deleteUsers);
-        // this.delete('/', ['PUBLIC'], passportStrategiesEnum.NOTHING, deleteUsers);
     }
 }

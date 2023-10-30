@@ -27,9 +27,8 @@ export default class UsersRepository {
         return result;
     }
 
-    updateUser = async (id, user) => {
-        const result = await this.dao.updateUser(id, user);
+    updateUser = async (id, data) => {
+        const result = await this.dao.updateUser(id, data);
         return result;
     }
-
 }

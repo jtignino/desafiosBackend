@@ -53,9 +53,27 @@ const logout = (req, res) => {
     }
 }
 
+const forgotPassword = (req, res) => {
+    try {
+        res.render('forgotPassword')
+    } catch (error) {
+        res.sendServerError(error.message)
+    }
+}
+
+const resetPassword = (req, res) => {
+    try {
+        res.render('resetPassword')
+    } catch (error) {
+        res.sendServerError(error.message)
+    }
+}
+
 export {
     register,
     login,
     logout,
-    products
+    products,
+    forgotPassword,
+    resetPassword
 }

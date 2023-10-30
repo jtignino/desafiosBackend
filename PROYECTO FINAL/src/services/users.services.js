@@ -1,6 +1,6 @@
 import UsersRepository from '../repositories/users.repository.js';
-import { IncorrectLoginCredentials, UserAlreadyExists, UserNotFound } from '../utils/custom-exception.js';
-import { loginNotification } from '../utils/custom-html.js';
+import { IncorrectLoginCredentials, ResetPasswordError, UserAlreadyExists, UserNotFound } from '../utils/custom-exception.js';
+import { loginNotification, forgotPasswordEmail, resetPasswordEmail } from '../utils/custom-html.js';
 import { createHash, generateToken, isValidPassword } from '../utils/utils.js';
 import { sendEmail } from './mail.js';
 
@@ -23,17 +23,52 @@ const login = async (user, password) => {
     if (!comparePassword) 
         throw new IncorrectLoginCredentials('Incorrect credentials.');
 
-    const accessToken = generateToken(user);
+    const accessToken = generateToken(user, '1h');
 
-    // const email = {
-    //     to: user.email,
-    //     subject: 'Intento de login',
-    //     html: loginNotification
-    // }
+    const email = {
+        to: user.email,
+        subject: 'Intento de login',
+        html: loginNotification
+    }
 
-    // await sendEmail(email);
+    await sendEmail(email);
 
     return accessToken;
+}
+
+const forgotPassword = async (userEmail) => {
+    const accessToken = generateToken({ email: userEmail }, '10m');
+
+    const email = {
+        to: userEmail,
+        subject: 'Restablecer contraseña',
+        html: forgotPasswordEmail(userEmail)
+    }
+
+    await sendEmail(email);
+
+    return accessToken;
+}
+
+const resetPassword = async (user, password) => {
+    const comparePassword = isValidPassword(user, password);
+    
+    if (comparePassword) 
+        throw new ResetPasswordError('The new password is the same as the previous one.');
+
+    const hashedPassword = createHash(password);
+
+    const result = await userRepository.updateUser(user._id, { password: hashedPassword });
+
+    const emailNotification = {
+        to: user.email,
+        subject: 'Se restableció su contraseña',
+        html: resetPasswordEmail
+    }
+
+    await sendEmail(emailNotification);
+    
+    return result;
 }
 
 const getUserRegister = async (email) => {
@@ -68,6 +103,8 @@ const register = async (user) => {
 export {
     getUserByEmail,
     login,
+    forgotPassword,
+    resetPassword,
     getUserRegister,
     getUsers,
     getUserById,

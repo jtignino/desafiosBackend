@@ -7,8 +7,18 @@ import config from './constants.config.js';
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
 
+const cookieExtractor = (req) => {
+    let token = null;
+    if (req && req.cookies) {
+        const cookieName = req.cookieName;
+        token = req.cookies[cookieName];
+    }
+    return token;
+}
+
 const initializePassport = () => {
     passport.use('jwt', new JWTStrategy({
+
         jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
         secretOrKey: config.privateKey
     }, async (jwt_payload, done) => {
@@ -70,14 +80,6 @@ const initializePassport = () => {
         done(null, user);
     });
     */
-}
-
-const cookieExtractor = req => {
-    let token = null;
-    if (req && req.cookies) {
-        token = req.cookies['coderCookieToken'];
-    }
-    return token;
 }
 
 export default initializePassport;

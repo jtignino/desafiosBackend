@@ -22,8 +22,8 @@ export default class UsersDao {
         return result;
     }
 
-    updateUser = async (id, user) => {
-        const result = await usersModel.findByIdAndUpdate(id, user);
+    updateUser = async (id, data) => {
+        const result = await usersModel.findOneAndUpdate({ _id: id }, data, { new: true });
         return result;
     }
 }

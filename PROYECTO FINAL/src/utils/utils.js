@@ -16,10 +16,11 @@ const createHash = password =>
 const isValidPassword = (user, password) =>
     bcrypt.compareSync(password, user.password);
 
-const generateToken = (user) => {
-    delete user.password;
+const generateToken = (user, expiryTime) => {
+    if (user.password) delete user.password;
 
-    const token = jwt.sign({ user }, config.privateKey, { expiresIn: '1h' });
+    const token = jwt.sign({ user }, config.privateKey, { expiresIn: expiryTime });
+    console.log(token)
     
     return token;
 };

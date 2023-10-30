@@ -14,48 +14,50 @@ export default class Router {
 
     init() { }
 
-    get(path, policies, passportStrategy, ...callbacks) {
+    get(path, policies, passportStrategy, cookieName, ...callbacks) {
         this.router.get(
             path,
-            this.applyCustomPassportCall(passportStrategy),
+            this.applyCustomPassportCall(passportStrategy, cookieName),
             this.handlePolicies(policies),
             this.generateCustomReponse,
             this.applyCallbacks(callbacks)
         );
     };
 
-    post(path, policies, passportStrategy, ...callbacks) {
+    post(path, policies, passportStrategy, cookieName, ...callbacks) {
         this.router.post(
             path,
-            this.applyCustomPassportCall(passportStrategy),
+            this.applyCustomPassportCall(passportStrategy, cookieName),
             this.handlePolicies(policies),
             this.generateCustomReponse,
             this.applyCallbacks(callbacks)
         );
     };
 
-    put(path, policies, passportStrategy, ...callbacks) {
+    put(path, policies, passportStrategy, cookieName, ...callbacks) {
         this.router.put(
             path,
-            this.applyCustomPassportCall(passportStrategy),
+            this.applyCustomPassportCall(passportStrategy, cookieName),
             this.handlePolicies(policies),
             this.generateCustomReponse,
             this.applyCallbacks(callbacks)
         );
     };
 
-    delete(path, policies, passportStrategy, ...callbacks) {
+    delete(path, policies, passportStrategy, cookieName, ...callbacks) {
         this.router.delete(
             path,
-            this.applyCustomPassportCall(passportStrategy),
+            this.applyCustomPassportCall(passportStrategy, cookieName),
             this.handlePolicies(policies),
             this.generateCustomReponse,
             this.applyCallbacks(callbacks)
         );
     };
 
-    applyCustomPassportCall = (strategy) => (req, res, next) => {
+    applyCustomPassportCall = (strategy, cookieName) => (req, res, next) => {
         if (strategy === passportStrategiesEnum.JWT) {
+            req.cookieName = cookieName;
+            console.log(req.cookieName)
             passport.authenticate(strategy, function (err, user, info) {
                 if (err) return next(err);
 

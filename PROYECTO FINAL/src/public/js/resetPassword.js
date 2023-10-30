@@ -1,6 +1,8 @@
-console.log('Login.js')
-const form = document.getElementById('loginForm');
+console.log('Reset password.js')
+const form = document.getElementById('resetForm');
 
+const url = new URL(window.location.href);
+const email = url.searchParams.get('email');
 
 form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -12,7 +14,7 @@ form.addEventListener('submit', (event) => {
         obj[key] = stringValue
     });
 
-    fetch('/api/users/login', {
+    fetch(`/api/users/resetPassword?email=${email}`, {
         method: 'POST',
         body: JSON.stringify(obj),
         headers: {
@@ -21,9 +23,11 @@ form.addEventListener('submit', (event) => {
     })
     .then(res => {
         if (res.status !== 200) return res.json();
-        else window.location.replace('/products');
+        else window.location.replace('/login');
     })
     .then(result => {
-        console.log(result)
+        if (result.error.includes("jwt expired")) {
+            window.location.replace('/forgotPassword')
+        }        
     })
 });

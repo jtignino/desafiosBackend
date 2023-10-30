@@ -53,3 +53,10 @@ export class DeleteProductError extends Error {
         this.name = this.constructor.name;
     }
 }
+
+export class ResetPasswordError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+    }
+}

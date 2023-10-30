@@ -1,6 +1,6 @@
 import * as usersService from '../services/users.services.js';
 import * as cartsService from '../services/carts.services.js';
-import { UserNotFound, IncorrectLoginCredentials, UserAlreadyExists } from '../utils/custom-exception.js';
+import { UserNotFound, IncorrectLoginCredentials, UserAlreadyExists, ResetPasswordError } from '../utils/custom-exception.js';
 
 
 const login = async (req, res) => {
@@ -55,6 +55,45 @@ const register = async (req, res) => {
     }
 }
 
+const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        await usersService.getUserByEmail(email);
+
+        const accessToken = await usersService.forgotPassword(email);
+
+        res.cookie('resetAccessToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true, sameSite: 'none', secure: true });
+
+        res.sendSuccess('Email sent.');
+
+    } catch (error) {
+        if (error instanceof UserNotFound) return res.sendClientError(error.message);
+
+        res.sendServerError(error.message);
+    }
+}
+
+const resetPassword = async (req, res) => {
+    try {
+        const { password } = req.body;
+
+        const email = req.query.email;
+        
+        const user = await usersService.getUserByEmail(email);
+
+        const result = await usersService.resetPassword(user, password);
+
+        res.sendSuccess(result);
+    } catch (error) {
+        if (error instanceof UserNotFound) return res.sendClientError(error.message);
+        
+        if (error instanceof ResetPasswordError) return res.sendClientError(error.message);
+
+        res.sendServerError(error.message);
+    }
+}
+
 const getUsers = async (req, res) => {
     try {
         const users = await usersService.getUsers();
@@ -83,6 +122,8 @@ const getUserById = async (req, res) => {
 export {
     login,
     register,
+    forgotPassword,
+    resetPassword,
     getUsers,
     getUserById
 }
