@@ -5,7 +5,7 @@ import { passportStrategiesEnum } from '../config/enums.config.js';
 export default class Router {
     constructor() {
         this.router = expressRouter();
-        this.init();
+        this.init();  
     };
 
     getRouter() {
