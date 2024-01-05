@@ -4,6 +4,8 @@ import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import cors from 'cors';
 import twilio from 'twilio';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
 
 import UsersRouter from './routes/users.router.js';
 import ProductsRouter from './routes/products.router.js';
@@ -28,6 +30,20 @@ const sessionsRouter = new SessionsRouter();
 const app = express();
 
 app.use(cors());
+
+const swaggerOptions = {
+    definition: {
+        openapi: '3.1.0',
+        info: {
+            title: 'Documentación del proyecto final del curso Programación Backend',
+            description: 'API pensada para la gestión de un e-commerce'
+        }
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+};
+
+const specs = swaggerJsdoc(swaggerOptions);
+app.use('/api/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 // Parámetros de configuración
 app.use(express.json());
