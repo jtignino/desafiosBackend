@@ -39,11 +39,19 @@ const register = async (req, res) => {
         if (!first_name || !last_name || !email || !password)
             return res.sendClientError('Incomplete values.');
 
+        const data = {
+            first_name,
+            last_name,
+            role,
+            email,
+            password
+        };
+
         await usersService.getUserRegister(email);
 
         const cart = await cartsService.create();
 
-        const register = await usersService.register({ ...req.body, cart });
+        const register = await usersService.register({ ...data, cart });
 
         res.sendSuccess(register);
 
