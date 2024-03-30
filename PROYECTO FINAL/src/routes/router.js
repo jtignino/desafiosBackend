@@ -89,11 +89,11 @@ export default class Router {
         res.sendSuccess = (data) => {
             res.status(200).json({ data });
         };
+        res.sendClientError = (error, statusHttp) => {
+            res.status(statusHttp ?? 400).json({ error });
+        };
         res.sendServerError = (error) => {
             res.status(500).json({ error });
-        };
-        res.sendClientError = (error) => {
-            res.status(400).json({ error });
         };
         next();
     }

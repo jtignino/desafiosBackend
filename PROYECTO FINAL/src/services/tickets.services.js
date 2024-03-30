@@ -21,7 +21,7 @@ const purchase = async (user, products) => {
 
             await productsRepository.updateProduct(product.product._id, { stock: (productDB.stock - product.quantity) });
         } else {
-            backorder.push(product.product._id);
+            backorder.push({ _id: product.product._id });
         }
     }
 
@@ -41,9 +41,9 @@ const purchase = async (user, products) => {
         purchaser: user.email
     };
 
-    const result = await ticketsRepository.createTicket(ticket);
+    const ticketResult = await ticketsRepository.createTicket(ticket);
 
-    return { result, backorderCart: backorder };
+    return { ticketResult, backorderCart: backorder };
 }
 
 export { purchase };

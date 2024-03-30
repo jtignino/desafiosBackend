@@ -24,9 +24,9 @@ const login = async (req, res) => {
         res.sendSuccess('Log in success.');
 
     } catch (error) {
-        if (error instanceof UserNotFound) return res.sendClientError(error.message);
+        if (error instanceof UserNotFound) return res.sendClientError(error.message, 404);
 
-        if (error instanceof IncorrectLoginCredentials) return res.sendClientError(error.message);
+        if (error instanceof IncorrectLoginCredentials) return res.sendClientError(error.message, 401);
 
         res.sendServerError(error.message);
     }
@@ -57,7 +57,7 @@ const register = async (req, res) => {
 
     } catch (error) {
         if (error instanceof UserAlreadyExists)
-            return res.sendClientError(error.message);
+            return res.sendClientError(error.message, 409);
 
         res.sendServerError(error.message);
     }
@@ -120,7 +120,7 @@ const getUserById = async (req, res) => {
 
         res.sendSuccess(user);
     } catch (error) {
-        if (error instanceof UserNotFound) return res.sendClientError(error.message);
+        if (error instanceof UserNotFound) return res.sendClientError(error.message, 404);
 
         res.sendServerError(error.message);
     }

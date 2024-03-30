@@ -15,7 +15,7 @@ paths:
                   $ref: '#/components/schemas/User'
         "500":
           description: Error interno del servidor, usualmente generado por una query defectuosa o fallo de conexión a la BDD.
-  
+
   /api/users/{id}:
     get:
       summary: Obtiene un usuario a partir de su Id.
@@ -25,7 +25,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: El id del usuario
+          description: Corresponde al Id del usuario
           schema:
             $type: String
       responses:
@@ -35,6 +35,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        "404":
+          description: No se encontró el usuario en la BDD. Puede ser generado por una mala petición.
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo de conexión a la BDD.
+
+  /api/users/login:
+    post:
+      summary: Inicia sesión.
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/requestBodies/login'
+      responses:
+        "200":
+          description: Inicio de sesión exitoso.
+        "401":
+          description: Error de autenticación. Las credenciales para inicio de sesión no son válidas.
+        "404":
+          description: Error del cliente, no se encontró el usuario en la BDD. Puede ser generado por una mala petición.
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo de conexión a la BDD.
+
+  /api/users/register:
+    post:
+      summary: Registra un nuevo usuario.
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/requestBodies/newUser'
+      responses:
+        "200":
+          description: El usuario fue registrado correctamente.
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Error del cliente. Puede ser generado por una sintaxis incorrecta o valores incompletos.
+        "409":
+          description: Error del cliente. Se intenta regisrar un usuario ya registrado en la BDD.
         "500":
           description: Error interno del servidor, usualmente generado por una query defectuosa o fallo de conexión a la BDD.
 
@@ -73,6 +121,41 @@ components:
         last_name: Doe
         email: mail@example.com
         age: 30
-        password: PasswordExample@241$
+        password: PasswordExample@111
         cart: ObjectId('b4546545mjjjhh563')
         role: admin
+  requestBodies:
+    newUser:
+      type: object
+      properties:
+        first_name:
+          type: String
+          description: Nombre del usuario
+        last_name:
+          type: String
+          description: Apellido del usuario
+        email:
+          type: String
+          description: Correo electrónico del usuario
+        password:
+          type: String
+          description: Password del usuario
+        role:
+          type: String
+          description: Rol del usuario     
+      example:
+        first_name: Jon
+        last_name: Doe
+        email: mail@example.com
+        password: PasswordExample$111
+        role: admin 
+    login:
+      type: object
+      properties:
+        email:
+          type: String
+          description: Correo electrónico del usuario
+        password: 
+          type: String
+          description: Contraseña del usuario
+

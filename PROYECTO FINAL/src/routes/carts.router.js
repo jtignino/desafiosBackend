@@ -1,12 +1,12 @@
 import Router from './router.js';
 import { passportStrategiesEnum } from '../config/enums.config.js';
 
-import { create, add, getCart, getAll, purchase, update, updateProductInCart, deleteProduct, emptyCart } from '../controllers/carts.controller.js';
+import { create, addToCart, getCart, getAll, purchase, update, updateProductInCart, deleteProduct, emptyCart } from '../controllers/carts.controller.js';
 
 export default class CartsRouter extends Router {
     init() {
         this.post('/', ['USER'], passportStrategiesEnum.JWT, create)
-        this.post('/:cid/product/:pid', ['USER'], passportStrategiesEnum.JWT, add)
+        this.post('/:cid/product/:pid', ['USER'], passportStrategiesEnum.JWT, addToCart)
         this.get('/:cid', ['USER'], passportStrategiesEnum.JWT, getCart);
         this.get('/', ['ADMIN'], passportStrategiesEnum.JWT, getAll);
         this.get('/:cid/purchase', ['USER'], passportStrategiesEnum.JWT, purchase);

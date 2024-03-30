@@ -14,7 +14,7 @@ const create = async (req, res) => {
     }
 }
 
-const add = async (req, res) => {
+const addToCart = async (req, res) => {
     try {
         const { cid, pid } = req.params;
         const { qty = 1 } = req.body;
@@ -23,13 +23,13 @@ const add = async (req, res) => {
 
         await cartsService.getById(cid);
 
-        const result = await cartsService.add(cid, pid, qty);
+        const result = await cartsService.addToCart(cid, pid, qty);
 
         res.sendSuccess(result);
     } catch (error) {
-        if (error instanceof ProductNotFound) return res.sendClientError(error.message);
+        if (error instanceof ProductNotFound) return res.sendClientError(error.message, 404);
 
-        if (error instanceof CartNotFound) return res.sendClientError(error.message);
+        if (error instanceof CartNotFound) return res.sendClientError(error.message, 404);
 
         res.sendServerError(error.message);
     }
@@ -43,7 +43,7 @@ const getCart = async (req, res) => {
 
         res.sendSuccess(cart);
     } catch (error) {
-        if (error instanceof CartNotFound) return res.sendClientError(error.message);
+        if (error instanceof CartNotFound) return res.sendClientError(error.message, 404);
 
         res.sendServerError(error.message);
     }
@@ -70,9 +70,9 @@ const purchase = async (req, res) => {
 
         const userResult = await usersService.getUserByEmail(user);
 
-        const { result, backorderCart } = await ticketsService.purchase(userResult, products);
+        const { ticketResult, backorderCart } = await ticketsService.purchase(userResult, products);
 
-        res.sendSuccess({ result, backorderCart });
+        res.sendSuccess({ ticketResult, backorderCart });
 
     } catch (error) {
         if (error instanceof CartNotFound) return res.sendClientError(error.message);
@@ -86,7 +86,7 @@ const purchase = async (req, res) => {
 const update = async (req, res) => {
     try {
         const { cid } = req.params;
-        const products = req.body;
+        const products = req.body;  //corregir vulnerabilidad
         const productsNotFound = [];
         let result;
 
@@ -173,7 +173,7 @@ const emptyCart = async (req, res) => {
 
 export {
     create,
-    add,
+    addToCart,
     getCart,
     getAll,
     purchase,

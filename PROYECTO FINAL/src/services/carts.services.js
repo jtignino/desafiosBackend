@@ -26,7 +26,7 @@ const getById = async (cid) => {
     return cart;
 }
 
-const add = async (cid, pid, qty) => {
+const addToCart = async (cid, pid, qty) => {
     const product = await findProduct(pid);
     
     if (!product) return pid;
@@ -64,7 +64,7 @@ export {
     create,
     getAll,
     getById,
-    add,
+    addToCart,
     updateProductInCart,
     deleteProduct,
     emptyCart

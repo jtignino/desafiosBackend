@@ -1,0 +1,224 @@
+paths:
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Agrega una cantidad determinada de un producto (id = 'pid') a un carrito específico (id = 'cid').
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Corresponde al Id del carrito.
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: Corresponde al Id del producto.
+          schema:
+            $type: String
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/addToCart"
+      responses:
+        "200":
+          description: El producto fue agregado correctamente al carrito.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "404":
+          description: No se encontró el producto o el carrito en la BDD. Puede ser generado por una mala petición.
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo de conexión a la BDD.
+
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene un carrito a partir de su Id.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Corresponde al Id del carrito.
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: El carrito fue obtenido satisfactoriamente de la BDD.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "404":
+          description: No se encontró el carrito en la BDD. Puede ser generado por una mala petición.
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo de conexión a la BDD.
+    put:
+      summary: Actualiza un carrito a partir de su Id (cid).
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Corresponde al Id del carrito.
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: Array
+              items:
+                $ref: "#/components/requestBodies/updateCart"
+      responses:
+        '200':
+          description: 
+
+
+
+  /api/carts:
+    get:
+      summary: Obtiene todos los carritos de la BDD.
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Los carritos fueron obtenidos satisfactoriamente de la BDD.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cart"
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo de conexión a la BDD.
+
+  /api/carts/{cid}/purchase:
+    get:
+      summary: Realiza el proceso de compra de un carrito a partir de su Id.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Corresponde al Id del carrito.
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: La compra se realizó satisfactoriamente. Retorna un objeto cuyos atributos corresponden al ticket de compra y un arreglo con los productos que no se han podido completar en la orden por falta de stock.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Purchase"
+
+  
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado por MongoDB.
+        products:
+          type: Array
+          items:
+            type: object
+            properties:
+              _id:
+                type: ObjectId
+                description: Id autogenerado por MongoDB.
+              product:
+                type: ObjectId
+                description: Id que hace referencia a un producto.
+              quantity:
+                type: Number
+                description: Cantidad correspondiente al producto agregado al carrito.
+      example:
+        _id: ObjectId('a6876dsd6767876sd6')
+        products:
+          [
+            {
+              _id: ObjectId('b4546545mjjjhh563'),
+              product: ObjectId('a65347f7g6dfs66g'),
+              quantity: 10,
+            },
+            {
+              _id: ObjectId('er766w6we8rghg9882'),
+              product: ObjectId('q262668rff8d78gfs7'),
+              quantity: 20,
+            },
+          ]
+    Purchase:
+      type: object
+      properties:
+        ticketResult:
+          type: object
+          description: Ticket generado por la compra.
+          properties:
+            _id:
+              type: ObjectId
+              description: Id autogenerado por MongoDB.
+            code:
+              type: String
+              description: Código único que identifica al ticket de compra.
+            purchase_datetime:
+              type: String
+              description: Fecha de la compra.
+            amount:
+              type: Number
+              description: Valor total de la compra.
+            purchaser:
+              type: String
+              description: Correo electrónico del comprador.
+        backorderCart:
+          type: array
+          description: Arreglo de productos que no se han podido completar en la orden de compra.
+          items:
+            properties:
+              _id:
+                type: ObjectId
+                description: Id autogenerado por MongoDB.
+      example:
+        _id: ObjectId('a6876dsd6767876sd6')
+        code: '1692569525073'
+        purchase_datetime: 1/6/2023
+        amount: 1000
+        purchaser: "example@example.com"
+        backorderCart: 
+          [
+            {
+              _id: ObjectId('a6876dfsd43678766')
+            },
+            {
+              _id: ObjectId('dfj73gb3588s5s454')
+            }
+          ]
+
+  requestBodies:
+    addToCart:
+      type: object
+      properties:
+        qty:
+          type: Number
+          description: Cantidad del producto a agregar.
+      example:
+        qty: 1
+    updateCart:
+      type: object
+      properties:
+        product: 
+          type: ObjectId('b564gdwqd43678766')
+          description: Id autogenerado por MongoDB.
+        quantity:
+          type: Number
+          description: Cantidad correspondiente al producto.
