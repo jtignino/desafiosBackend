@@ -39,5 +39,19 @@ describe('Probando el DAO de usuarios.', () => {
         const result = await usersDao.saveUser(mockUser);
         assert.ok(result._id);
     })
-    
+
+    it('El DAO debe poder obtener un usuario a partir de su email.', async () => {
+        const mockUser = {
+            first_name: 'Testing',
+            last_name: 'Mocha',
+            email: 'test_mocha@gmail.com',
+            password: 'testmocha1234',
+            role: 'tester'
+        };
+
+        const result = await usersDao.saveUser(mockUser);
+        const user = await usersDao.getUserByEmail(mockUser.email);
+        assert.strictEqual(typeof user, 'object')
+    })
+
 })
