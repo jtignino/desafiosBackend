@@ -105,7 +105,6 @@ const resetPassword = async (req, res) => {
 const getUsers = async (req, res) => {
     try {
         const users = await usersService.getUsers();
-
         res.sendSuccess(users);
     } catch (error) {
         res.sendServerError(error.message);
