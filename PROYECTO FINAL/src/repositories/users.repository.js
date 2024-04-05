@@ -31,4 +31,9 @@ export default class UsersRepository {
         const result = await this.dao.updateUser(id, data);
         return result;
     }
+
+    deleteUser = async (email) => {
+        const result = await this.dao.deleteUser(email);
+        return result;
+    }
 }

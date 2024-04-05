@@ -10,9 +10,9 @@ const login = async (req, res) => {
         const user = await usersService.getUserByEmail(email);
 
         const accessToken = await usersService.login(user, password);
-        
+
         res.cookie('coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true, sameSite: 'none', secure: true })
-        
+
         if (user.role === 'admin') {
             return res.sendSuccess('Log in success ADMIN.');
         } else if (req && !req.signedCookies['cartId']) {
@@ -87,7 +87,7 @@ const resetPassword = async (req, res) => {
         const { password } = req.body;
 
         const email = req.query.email;
-        
+
         const user = await usersService.getUserByEmail(email);
 
         const result = await usersService.resetPassword(user, password);
@@ -95,7 +95,7 @@ const resetPassword = async (req, res) => {
         res.sendSuccess(result);
     } catch (error) {
         if (error instanceof UserNotFound) return res.sendClientError(error.message);
-        
+
         if (error instanceof ResetPasswordError) return res.sendClientError(error.message);
 
         res.sendServerError(error.message);
@@ -125,6 +125,21 @@ const getUserById = async (req, res) => {
     }
 }
 
+const deleteUser = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        await usersService.getUserById(id);
+
+        const result = await usersService.deleteUser(email);
+
+        res.sendSuccess(result);
+    } catch (error) {
+        if (error instanceof UserNotFound) return res.sendClientError(error.message, 404);
+
+        res.sendServerError(error.message);
+    }
+}
 
 export {
     login,
@@ -132,5 +147,6 @@ export {
     forgotPassword,
     resetPassword,
     getUsers,
-    getUserById
+    getUserById,
+    deleteUser
 }

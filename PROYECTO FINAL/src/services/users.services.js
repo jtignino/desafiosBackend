@@ -100,6 +100,12 @@ const register = async (user) => {
     return result;
 }
 
+const deleteUser = async (email) => {
+    const result = await userRepository.deleteUser(email);
+
+    return result;
+}
+
 export {
     getUserByEmail,
     login,
@@ -108,5 +114,6 @@ export {
     getUserRegister,
     getUsers,
     getUserById,
-    register
+    register,
+    deleteUser
 }

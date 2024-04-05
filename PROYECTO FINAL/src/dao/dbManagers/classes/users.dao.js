@@ -26,4 +26,9 @@ export default class UsersDao {
         const result = await usersModel.findOneAndUpdate({ _id: id }, data, { new: true });
         return result;
     }
+
+    deleteUser = async (email) => {
+        const result = await usersModel.deleteOne({ email });
+        return result;
+    }
 }

@@ -1,7 +1,7 @@
 import Router from './router.js';
 import { passportStrategiesEnum } from '../config/enums.config.js';
 
-import { login, register, forgotPassword, resetPassword, getUsers, getUserById } from '../controllers/users.controller.js';
+import { login, register, forgotPassword, resetPassword, getUsers, getUserById, deleteUser } from '../controllers/users.controller.js';
 
 export default class UsersRouter extends Router {
     init() {
@@ -15,6 +15,6 @@ export default class UsersRouter extends Router {
         this.get('/:id', ['PUBLIC'], passportStrategiesEnum.NOTHING, 'coderCookieToken', getUserById);
         this.get('/', ['PUBLIC'], passportStrategiesEnum.NOTHING, 'coderCookieToken', getUsers);
         
-        // this.delete('/', ['ADMIN'], passportStrategiesEnum.JWT, deleteUsers);
+        this.delete('/', ['ADMIN'], passportStrategiesEnum.NOTHING, 'coderCookieToken', deleteUser);
     }
 }
